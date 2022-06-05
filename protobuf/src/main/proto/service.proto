@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package stock.backtesting;
+
+service BackTestingService {
+  rpc BackTestingService (BackTestingServiceRequest) returns (BackTestingServiceResponse);
+}
+
+message BackTestingServiceRequest {
+  message Condition {
+    message Sigma {
+      // N 봉전
+      int64 time = 3;
+      // 기간
+      int64 duration = 1;
+      // 선
+      int64 line = 2;
+    }
+    message Psar {
+      // 상향 돌파
+      bool upwardLineBreak = 1;
+    }
+    message Cci {
+      // N 봉전
+      int64 time = 3;
+      // 기간
+      int64 duration = 1;
+      // 선
+      int64 line = 2;
+    }
+    // 종가대비 시가등락률
+    message OpenPrice {
+      // 종가대비
+      int64 closeBefore = 1;
+      // 시가등락률
+      int64 range = 2;
+    }
+    // 영업이익
+    message CompanyProfit {
+      int64 recentQuarter = 1;
+      int64 recentYear = 2;
+    }
+    // 당일 거래량 순위
+    int64 volume = 1;
+    // 전일 대비 등락률
+    int64 range = 2;
+    // 금액
+    int64 amount = 3;
+    repeated Sigma sigma = 4;
+    repeated Cci cci = 7;
+    // 종가대비
+    OpenPrice openPrice = 5;
+    CompanyProfit companyProfit = 6;
+    Psar psar = 8;
+    google.protobuf.Timestamp date = 9;
+  }
+
+  repeated Condition conditions = 1;
+}
+
+message BackTestingServiceResponse {
+  int64 success = 1;
+}
